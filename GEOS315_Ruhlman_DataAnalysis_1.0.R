@@ -2,6 +2,7 @@
 #Data Analysis for Hair Sampling
 #Last Updated: 3/29/2021
 #Last Updated By: Hope D'Erasmo (hderasmo@wellesley.edu)
+#Set your working directory locally!
 
 #Data Wrangling
 
@@ -72,7 +73,7 @@ PrelimHairData_1.0_Percents_Labeled <- rename(PrelimHairData_1.0_Percents,
                                       Np = Column211, Pu = Column214, Am = Column217)
 
 ##Remove Row 1
-PrelimHairData_1.0_Percents_Labeled <- PrelimHairData_1.0_Percents_Labeled[-c(1),] 
+PrelimHairData_1.0_Percents_Labeled <- PrelimHairData_1.0_Percents_Labeled[-c(1,2),] 
 
 ##Rename to a easier to use variable name
 PrelimHairData_1.0 <- PrelimHairData_1.0_Percents_Labeled
@@ -102,7 +103,7 @@ for (r in 1:numRow){
   
     if (grepl("<",PrelimHairCont[r, c], fixed = TRUE) == TRUE) {
       
-      PrelimHairContNAs[r,c] <- NA
+      PrelimHairContNAs[r,c] <- NA ##If you want to not exclude them, change this
     }
     
     else{
