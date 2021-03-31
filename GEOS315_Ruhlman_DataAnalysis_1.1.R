@@ -329,6 +329,86 @@ library(dyplyr)
 library(colorspace)
 library(readxl)
 
+##Creating a dataframe that combines XEPOS data and survey data
+HairSamplesContEOI #This is the object that's all of the EOI values in ppm
+
+###Add the column of sample names back to that object
+HairSamplesEOINames <- select(HairSamplesContEOI, Zn, Fe, Cu, Ni, Mo, 
+                              Pb, Sb, Ca, Ti, S, Si, P, Br) %>%
+  mutate(Sample.ID = c("H1-03.14.21-03",
+                      "H1-03.14.21-02",
+                      "H1-03.14.21-01",
+                      "H2-03.25.21-01",
+                      "H2-03.25.21-02",
+                      "H2-03.25.21-03",
+                      "H3-03.25.21-01",
+                      "H3-03.25.21-02",
+                      "H3-03.25.21-03",
+                      "H4-03.25.21-01", 
+                      "H4-03.25.21-02", 
+                      "H4-03.25.21-03", 
+                      "H5-03.25.21-01", 
+                      "H5-03.25.21-02", 
+                      "H5-03.25.21-03",
+                      "H6-03.25.21-01",
+                      "H6-03.25.21-02",
+                      "H6-03.25.21-03",
+                      "H7-03.24.21-01",
+                      "H7-03.24.21-02",
+                      "H8-03.21.21-01",
+                      "H8-03.21.21-02",
+                      "H8-03.21.21-03",
+                      "H9-03.25.21-02",
+                      "H9-03.25.21-03",
+                      "H10-03.26.21-01",
+                      "H10-03.26.21-02",
+                      "H10-03.26.21-03",
+                      "H11-02.26.21-01", 
+                      "H11-02.26.21-02", 
+                      "H12-03.26.21-01",
+                      "H12-03.26.21-02",
+                      "H12-03.26.21-03",
+                      "H13-03.26.21-01",
+                      "H13-03.26.21-02",
+                      "H13-03.26.21-03",
+                      "H14-03.26.21-01",
+                      "H14-03.26.21-02",
+                      "H14-03.26.21-03",
+                      "H15-03.26.21-01",
+                      "H15-03.26.21-02",
+                      "H15-03.26.21-03",
+                      "H16-03.27.21-01", 
+                      "H16-03.27.21-02",
+                      "H17-03.26.21-01",
+                      "H17-03.26.21-02",
+                      "H17-03.26.21-03",
+                      "H18-03.28.21-01",
+                      "H18-03.28.21-02",
+                      "H18-03.28.21-03",
+                      "H20-03.28.21-01",
+                      "H20-03.28.21-02",
+                      "H20-03.28.21-03",
+                      "H21-03.28.21-01",
+                      "H21-03.28.21-02",
+                      "H21-03.28.21-03",
+                      "H22-03.29.21-01",
+                      "H22-03.29.21-02",
+                      "H22-03.29.21-03"))
+
+##Load in Survey data
+SurveyData_1.0 <- read.csv("Survey Data Polished - Data Reorganized.csv")
+
+##Merge the two dataframes using a loop
+SampleSurvey_Empty <- right_join(SurveyData_1.0, HairSamplesEOINames,
+                                by = "Sample.ID")
+
+##Remove rows we don't care about
+SampleSurvey_Empty <- select(SurveyData_1.0, -c(n, Sample.., Date.Form.was.filled.out, 
+                                                Date.Sample.was.taken..if.different.
+                                                    ))
+
+
+
 ##Following Dan's SOP:
 
 PrelimHair_pca <- PrelimHairData_1.0
