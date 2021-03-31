@@ -1,6 +1,6 @@
 #GEOS 315 Ruhlman 2021
 #Data Analysis for Hair Sampling
-#Last Updated: 3/29/2021
+#Last Updated: 3/31/2021
 #Last Updated By: Hope D'Erasmo (hderasmo@wellesley.edu)
 #Set your working directory!
 
@@ -13,7 +13,6 @@ library(readr)
 library(tidyverse)
 
 ##Load the Data from the Local Computer
-PrelimHairData_1.0 <- read.csv("PrelimHairData_3-19.csv")
 HairData_1.0 <- read.csv("Test Hair Sample Data - XEPOS Data.csv")
 
 ##Create an Object that is just the percents for each element
@@ -122,6 +121,7 @@ for (r in 1:numRow){
 ###Convert percentages to ppm for samples
 
 ####Temporarily remove the SampleName column for this to work
+HairSampleNames <- select(HairSamples.NAs_1.0, c(SampleName))
 HairSamplesCont <- select(HairSamples.NAs_1.0, -c(SampleName))
 
 ####Convert these data to numeric types hopefully finally
@@ -149,6 +149,67 @@ for (r in 1:numRow){
   
 }
 
+###Rename rows to be the sample names
+
+rownames(HairSamples.ppm_1.0) <- c("H1-3.14.21-03",
+                                   "H1-3.14.21-02",
+                                   "H1-3.14.21-01",
+                                   "H2-3.25.21-01",
+                                   "H2-3.25.21-02",
+                                   "H2-3.25.21-03",
+                                   "H3-03.25.21-01",
+                                   "H3-03.25.21-02",
+                                   "H3-03.25.21-03",
+                                   "H4-03.25.21-01", 
+                                   "H4-03.25.21-02", 
+                                   "H4-03.25.21-03", 
+                                   "H5-03.25.21-01", 
+                                   "H5-03.25.21-02", 
+                                   "H5-03.25.21-03",
+                                   "H6-03.25.21-01",
+                                   "H6-03.25.21-02",
+                                   "H6-03.25.21-03",
+                                   "H7-03.24.21-01",
+                                   "H7-03.24.21-02",
+                                   "H8-03.21.21-01",
+                                   "H8-03.21.21-02",
+                                   "H8-03.21.21-03",
+                                   "H9-03.25.21-02",
+                                   "H9-03.25.21-03",
+                                   "H10-03.26.21-01",
+                                   "H10-03.26.21-02",
+                                   "H10-03.26.21-03",
+                                   "H11-02.26.21-01", 
+                                   "H11-02.26.21-02", 
+                                   "H12-03.26.21-01",
+                                   "H12-03.26.21-02",
+                                   "H12-03.26.21-03",
+                                   "H13-03.26.21-01",
+                                   "H13-03.26.21-02",
+                                   "H13-03.26.21-03",
+                                   "H14-03.26.21-01",
+                                   "H14-03.26.21-02",
+                                   "H14-03.26.21-03",
+                                   "H15-03.26.21-01",
+                                   "H15-03.26.21-02",
+                                   "H15-03.26.21-03",
+                                   "H16-03.27.21-01", 
+                                   "H16-03.27.21-02",
+                                   "H17-03.26.21-01",
+                                   "H17-03.26.21-02",
+                                   "H17-03.26.21-03",
+                                   "H18-03.28.21-01",
+                                   "H18-03.28.21-02",
+                                   "H18-03.28.21-03",
+                                   "H20-03.28.21-01",
+                                   "H20-03.28.21-02",
+                                   "H20-03.28.21-03",
+                                   "H21-03.28.21-01",
+                                   "H21-03.28.21-02",
+                                   "H21-03.28.21-03",
+                                   "H22-03.29.21-01",
+                                   "H22-03.29.21-02",
+                                   "H22-03.29.21-03")
 
 
 
@@ -209,6 +270,25 @@ for (r in 1:numRow){
   
 }
 
+###Rename rows to be the standard names
+rownames(HairStandards.ppm_1.0) <- c("H Stuffing Standard (1)",
+                                     "H-Stuffing Standard (2)",
+                                     "NIST 1515 (1)",
+                                     "NIST 2709 (2)",
+                                     "NIST 2709 (3)",
+                                     "NIST 2709 (4)", 
+                                     "NIST 1515 (2)",
+                                     "NIST 2709 (5)",
+                                     "NIST 1515 (3)",
+                                     "NIST 2709 (6)",
+                                     "NIST 1515 (4)",
+                                     "NIST 2709 (7)",
+                                     "NIST 1515 (5)",
+                                     "NIST 2709 (8)",
+                                     "NIST 1515 (6)"
+                                     
+)
+
 #Linear Regression Table Construction
 
 ##Load required packages:
@@ -217,46 +297,24 @@ library(Hmisc)
 library(factoextra)
 
 
-##Step 1: Select Only Continuous Variables from the Dataset
+##Step 1: Select Only Continuous Variables from the Sample Dataset
 
-PrelimHairCont <- select(PrelimHairData_1.0, -c(SampleName)) %>%
-  drop_na()
+HairSamplesCont <- HairSamples.ppm_1.0
 
-##Step 2: Drop any rows with NA values or Non-numeric values
+##Step 2: Select out only EOIs
+HairSamplesContEOI <- select(HairSamplesCont, c(Zn,Fe, Cu, Ni, Mo, Pb, Sb,
+                                                Ca, Ti, S, Si, P, Br))
 
-numRow <- nrow(PrelimHairCont)
-numCol <- ncol(PrelimHairCont)
-PrelimHairContNAs <-PrelimHairCont
-
-for (r in 1:numRow){
-  
-  for(c in 1:numCol){
-  
-    if (grepl("<",PrelimHairCont[r, c], fixed = TRUE) == TRUE) {
-      
-      PrelimHairContNAs[r,c] <- NA ##If you want to not exclude them, change this
-    }
-    
-    else{
-      
-      PrelimHairContNAs[r,c] <- PrelimHairCont[r,c]
-    }
-  
-}
-  
-}
-
-#PrelimHairContFinal <- drop_na(PrelimHairContNAs)
 
 ##Step 3: Calculate the Correlation Matrix (including p-values)
 
-PrelimHairCont_cor <- rcorr(as.matrix(PrelimHairContNAs), type="pearson")
-PrelimHairCont_cor$r # look at correlation coefficients (r)
-PrelimHairCont_cor$P # look at p-values for each pairwise comparison
+HairSamplesCont_cor <- rcorr(as.matrix(HairSamplesContEOI), type="pearson")
+HairSamplesCont_cor$r # look at correlation coefficients (r)
+HairSamplesCont_cor$P # look at p-values for each pairwise comparison
 
 ##Step 4 (Optional): Create a correlogram to better visualize the correlations
 
-corrplot(PrelimHairCont_cor$r, type = "upper", 
+corrplot(HairSamplesCont_cor$r, type = "upper", 
          tl.col = "black", 
          tl.srt = 45, # tilt top row to 45-degree angle
          addCoef.col = "black") 
