@@ -2,7 +2,7 @@
 #Data Analysis for Hair Sampling
 #Last Updated: 3/29/2021
 #Last Updated By: Hope D'Erasmo (hderasmo@wellesley.edu)
-#Set your working directory locally!
+#Set your working directory!
 
 #Data Wrangling
 
@@ -14,6 +14,7 @@ library(tidyverse)
 
 ##Load the Data from the Local Computer
 PrelimHairData_1.0 <- read.csv("PrelimHairData_3-19.csv")
+HairData_1.0 <- read.csv("Test Hair Sample Data - XEPOS Data.csv")
 
 ##Create an Object that is just the percents for each element
 
