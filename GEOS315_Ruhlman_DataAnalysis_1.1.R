@@ -449,6 +449,52 @@ featuresOfProduct_vector <- as.vector(SampleSurvey_pca$Features.of.Product.)
 SampleSurvey_pca <- HairSamplesContEOI %>%
   drop_na()
 
+# 2. Look at the distributions of the continuous variables to see if you should
+#    use a log scale, etc.
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Zn))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Fe))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Cu))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Ni))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Mo))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Pb))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Sb))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Ca))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Ti))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = S))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Si))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = P))
+
+ggplot(data = SampleSurvey_pca) + 
+  geom_freqpoly(aes(x = Br))
+
+##Log transform the dataframe (CHECK WITH DAN ABOUT THIS)
+#SampleSurvey_pca_log <- data.frame(log(SampleSurvey_pca)) %>%
+ # drop_na()
+
 
 # 3. Estimate the PCA Model
 
