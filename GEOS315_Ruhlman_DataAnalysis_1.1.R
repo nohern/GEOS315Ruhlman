@@ -319,6 +319,15 @@ corrplot(HairSamplesCont_cor$r, type = "upper",
          tl.srt = 45, # tilt top row to 45-degree angle
          addCoef.col = "black") 
 
+##Step 5 (optional): Create a coreelogram with coloring based on p-values
+corrplot(HairSamplesCont_cor$r, type = "upper", 
+         tl.col = "black", 
+         tl.srt = 45, # tilt top row to 45-degree angle
+         p.mat = LCE_cor$P, # p-values from matrix
+         sig.level = 0.05, # alpha value for signficance
+         addCoef.col = "black",
+         insig = "blank")
+
 
 
 #PCA Construction 
@@ -398,12 +407,12 @@ HairSamplesEOINames <- select(HairSamplesContEOI, Zn, Fe, Cu, Ni, Mo,
 ##Load in Survey data
 SurveyData_1.0 <- read.csv("Survey Data Polished - Data Reorganized.csv")
 
-##Merge the two dataframes using a loop
-SampleSurvey_Empty <- right_join(SurveyData_1.0, HairSamplesEOINames,
+##Merge the two dataframes
+SampleSurvey_ppm <- right_join(SurveyData_1.0, HairSamplesEOINames,
                                 by = "Sample.ID")
 
 ##Remove rows we don't care about
-SampleSurvey_Empty <- select(SurveyData_1.0, -c(n, Sample.., Date.Form.was.filled.out, 
+SampleSurvey_ppm <- select(SampleSurvey_ppm, -c(n, Sample.., Date.Form.was.filled.out, 
                                                 Date.Sample.was.taken..if.different.
                                                     ))
 
@@ -411,30 +420,50 @@ SampleSurvey_Empty <- select(SurveyData_1.0, -c(n, Sample.., Date.Form.was.fille
 
 ##Following Dan's SOP:
 
-PrelimHair_pca <- PrelimHairData_1.0
 
 # See if the data needs to be normalized using a log function (?)
 
 ##Steps that Hope knows:
+
+# 1. Specify categorical variables to be their own objects and remove
+#    them from the data frame
+
+SampleSurvey_pca <- SampleSurvey_ppm %>%
+  drop_na()
+
+age_vector <- as.vector(SampleSurvey_pca$Age)
+curResidence_vector <- as.vector(SampleSurvey_pca$Current.Residence)
+childResidence_vector <- as.vector(SampleSurvey_pca$Childhood.Residence)
+demographic_vector <- as.vector(SampleSurvey_pca$Demographic)
+diet_vector <- as.vector(SampleSurvey_pca$Diet)
+chemicalTreatment_vector <- as.vector(SampleSurvey_pca$Chemical.Treatment)
+hairColor_vector <- as.vector(SampleSurvey_pca$Natural.Hair.Color)
+hairTexture_vector <- as.vector(SampleSurvey_pca$Hair.Texture)
+hairDensity_vector <- as.vector(SampleSurvey_pca$Hair.Density)
+productsUsed_vector <- as.vector(SampleSurvey_pca$Products.Used)
+featuresOfProduct_vector <- as.vector(SampleSurvey_pca$Features.of.Product.)
+
+
 # 1. Create a dataframe with only columns for the PCA
 
-# 2. Specify categorical variables to be their own objects and remove
-#    them from the data frame
+SampleSurvey_pca <- HairSamplesContEOI %>%
+  drop_na()
+
 
 # 3. Estimate the PCA Model
 
-PrelimHair_pca_est <- prcomp(PrelimHair_pca, center= TRUE, scale.=TRUE)
+SampleSurvey_pca_est <- prcomp(SampleSurvey_pca, center= TRUE, scale.=TRUE)
 
 # 4. Look at summary output of the pricipal components
 
-summary(PrelimHair_pca_est)
+summary(SampleSurvey_pca_est)
 
 # 5. Summary plot showing percent variation in each principal component
 
-fviz_eig(PrelimHair_pca_est)
+fviz_eig(SampleSurvey_pca_est)
 
 # 6. PCA plot mapping variables in relation to each other on PC1 & PC2
-fviz_pca_var(PrelimHair_pca_est,
+fviz_pca_var(SampleSurvey_pca_est,
              geom.ind = "point", # show points only (but not "text")
              mean.point = FALSE, # Remove point that represents the mean of each group
              addEllipses = FALSE, # add ellipses
@@ -442,13 +471,13 @@ fviz_pca_var(PrelimHair_pca_est,
   theme_bw()
 
 # 7. You can plot PCA also grouped based on one of your categorical variables
-fviz_pca_biplot(PrelimHair_pca_est,
+fviz_pca_biplot(SampleSurvey_pca_est,
                 geom.ind = "point", # show points only (but not "text")
-                col.ind = CATEGORICAL VARIABLE, # color by categorical variable
+                col.ind = diet_vector, # color by categorical variable
                 mean.point = FALSE, # Remove point that represents the mean of each group
                 addEllipses = TRUE, # add ellipses
                 col.var = "black", # make variables & arrows black (default is blue)
-                legend.title = "CATEGORICAL VARIABLE")  +
+                legend.title = "Diet")  +
   theme_bw()
 
 
