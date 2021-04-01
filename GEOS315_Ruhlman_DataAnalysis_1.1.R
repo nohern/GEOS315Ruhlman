@@ -328,6 +328,7 @@ corrplot(HairSamplesCont_cor$r, type = "upper",
          sig.level = 0.05, # alpha value for signficance
          addCoef.col = "black",
          insig = "blank")
+##tbh this isn't displaying the p-values and I'm not totally sure why :/
 
 
 
