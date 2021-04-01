@@ -446,12 +446,12 @@ productsUsed_vector <- as.vector(SampleSurvey_pca$Products.Used)
 featuresOfProduct_vector <- as.vector(SampleSurvey_pca$Features.of.Product.)
 
 
-# 1. Create a dataframe with only columns for the PCA
+# 2. Create a dataframe with only columns for the PCA
 
 SampleSurvey_pca <- HairSamplesContEOI %>%
   drop_na()
 
-# 2. Look at the distributions of the continuous variables to see if you should
+# 3. Look at the distributions of the continuous variables to see if you should
 #    use a log scale, etc.
 
 ggplot(data = SampleSurvey_pca) + 
@@ -465,9 +465,6 @@ ggplot(data = SampleSurvey_pca) +
 
 ggplot(data = SampleSurvey_pca) + 
   geom_freqpoly(aes(x = Ni))
-
-ggplot(data = SampleSurvey_pca) + 
-  geom_freqpoly(aes(x = Mo))
 
 ggplot(data = SampleSurvey_pca) + 
   geom_freqpoly(aes(x = Pb))
@@ -498,19 +495,19 @@ ggplot(data = SampleSurvey_pca) +
  # drop_na()
 
 
-# 3. Estimate the PCA Model
+# 4. Estimate the PCA Model
 
 SampleSurvey_pca_est <- prcomp(SampleSurvey_pca, center= TRUE, scale.=TRUE)
 
-# 4. Look at summary output of the pricipal components
+# 5. Look at summary output of the pricipal components
 
 summary(SampleSurvey_pca_est)
 
-# 5. Summary plot showing percent variation in each principal component
+# 6. Summary plot showing percent variation in each principal component
 
 fviz_eig(SampleSurvey_pca_est)
 
-# 6. PCA plot mapping variables in relation to each other on PC1 & PC2
+# 7. PCA plot mapping variables in relation to each other on PC1 & PC2
 fviz_pca_var(SampleSurvey_pca_est,
              geom.ind = "point", # show points only (but not "text")
              mean.point = FALSE, # Remove point that represents the mean of each group
@@ -518,7 +515,7 @@ fviz_pca_var(SampleSurvey_pca_est,
              col.var = "black") + # make variables & arrows black (default is blue)
   theme_bw()
 
-# 7. You can plot PCA also grouped based on one of your categorical variables
+# 8. You can plot PCA also grouped based on one of your categorical variables
 fviz_pca_biplot(SampleSurvey_pca_est,
                 geom.ind = "point", # show points only (but not "text")
                 col.ind = featuresOfProduct_vector, # color by categorical variable
