@@ -521,11 +521,11 @@ fviz_pca_var(SampleSurvey_pca_est,
 # 7. You can plot PCA also grouped based on one of your categorical variables
 fviz_pca_biplot(SampleSurvey_pca_est,
                 geom.ind = "point", # show points only (but not "text")
-                col.ind = diet_vector, # color by categorical variable
+                col.ind = featuresOfProduct_vector, # color by categorical variable
                 mean.point = FALSE, # Remove point that represents the mean of each group
                 addEllipses = TRUE, # add ellipses
                 col.var = "black", # make variables & arrows black (default is blue)
-                legend.title = "Diet")  +
+                legend.title = "Features of Products Used")  +
   theme_bw()
 
 
