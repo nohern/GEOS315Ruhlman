@@ -32,17 +32,13 @@ library(factoextra)
 
 ##Step 1: Select Only Continuous Variables from the Sample Dataset
 
-HairSamplesCont <- HairSamples.ppm_1.0
-
-##Step 2: Select out only EOIs
-HairSamplesContEOI <- select(HairSamplesCont, c(Zn,Fe, Cu, Ni, #Mo,
-                                                Pb, Sb,
-                                                Ca, Ti, S, Si, P, Br))
+HairSamplesNum
 
 
-##Step 3: Calculate the Correlation Matrix (including p-values)
 
-HairSamplesCont_cor <- rcorr(as.matrix(HairSamplesContEOI), type="pearson")
+##Step 2: Calculate the Correlation Matrix (including p-values)
+
+HairSamplesCont_cor <- rcorr(as.matrix(HairSamplesNum), type="pearson")
 HairSamplesCont_cor$r # look at correlation coefficients (r)
 HairSamplesCont_cor$P # look at p-values for each pairwise comparison
 
@@ -74,83 +70,7 @@ library(colorspace)
 library(readxl)
 
 ##Creating a dataframe that combines XEPOS data and survey data
-HairSamplesContEOI #This is the object that's all of the EOI values in ppm
-
-###Add the column of sample names back to that object
-HairSamplesEOINames <- select(HairSamplesContEOI, Zn, Fe, Cu, Ni, #Mo, 
-                              Pb, Sb, Ca, Ti, S, Si, P, Br) %>%
-  mutate(Sample.ID = c("H1-03.14.21-03",
-                      "H1-03.14.21-02",
-                      "H1-03.14.21-01",
-                      "H2-03.25.21-01",
-                      "H2-03.25.21-02",
-                      "H2-03.25.21-03",
-                      "H3-03.25.21-01",
-                      "H3-03.25.21-02",
-                      "H3-03.25.21-03",
-                      "H4-03.25.21-01", 
-                      "H4-03.25.21-02", 
-                      "H4-03.25.21-03", 
-                      "H5-03.25.21-01", 
-                      "H5-03.25.21-02", 
-                      "H5-03.25.21-03",
-                      "H6-03.25.21-01",
-                      "H6-03.25.21-02",
-                      "H6-03.25.21-03",
-                      "H7-03.24.21-01",
-                      "H7-03.24.21-02",
-                      "H8-03.21.21-01",
-                      "H8-03.21.21-02",
-                      "H8-03.21.21-03",
-                      "H9-03.25.21-02",
-                      "H9-03.25.21-03",
-                      "H10-03.26.21-01",
-                      "H10-03.26.21-02",
-                      "H10-03.26.21-03",
-                      "H11-02.26.21-01", 
-                      "H11-02.26.21-02", 
-                      "H12-03.26.21-01",
-                      "H12-03.26.21-02",
-                      "H12-03.26.21-03",
-                      "H13-03.26.21-01",
-                      "H13-03.26.21-02",
-                      "H13-03.26.21-03",
-                      "H14-03.26.21-01",
-                      "H14-03.26.21-02",
-                      "H14-03.26.21-03",
-                      "H15-03.26.21-01",
-                      "H15-03.26.21-02",
-                      "H15-03.26.21-03",
-                      "H16-03.27.21-01", 
-                      "H16-03.27.21-02",
-                      "H17-03.26.21-01",
-                      "H17-03.26.21-02",
-                      "H17-03.26.21-03",
-                      "H18-03.28.21-01",
-                      "H18-03.28.21-02",
-                      "H18-03.28.21-03",
-                      "H20-03.28.21-01",
-                      "H20-03.28.21-02",
-                      "H20-03.28.21-03",
-                      "H21-03.28.21-01",
-                      "H21-03.28.21-02",
-                      "H21-03.28.21-03",
-                      "H22-03.29.21-01",
-                      "H22-03.29.21-02",
-                      "H22-03.29.21-03"))
-
-##Load in Survey data
-SurveyData_1.0 <- read.csv("Survey Data Polished - Data Reorganized.csv")
-
-##Merge the two dataframes
-SampleSurvey_ppm <- right_join(SurveyData_1.0, HairSamplesEOINames,
-                                by = "Sample.ID")
-
-##Remove rows we don't care about
-SampleSurvey_ppm <- select(SampleSurvey_ppm, -c(n, Sample.., Date.Form.was.filled.out, 
-                                                Date.Sample.was.taken..if.different.
-                                                    ))
-
+HairData_2.0 #This is the object that's all of the EOI values in ppm
 
 
 ##Following Dan's SOP:
@@ -163,7 +83,7 @@ SampleSurvey_ppm <- select(SampleSurvey_ppm, -c(n, Sample.., Date.Form.was.fille
 # 1. Specify categorical variables to be their own objects and remove
 #    them from the data frame
 
-SampleSurvey_pca <- SampleSurvey_ppm %>%
+SampleSurvey_pca <- HairData_2.0 %>%
   drop_na()
 
 age_vector <- as.vector(SampleSurvey_pca$Age)
@@ -181,7 +101,7 @@ featuresOfProduct_vector <- as.vector(SampleSurvey_pca$Features.of.Product.)
 
 # 2. Create a dataframe with only columns for the PCA
 
-SampleSurvey_pca <- HairSamplesContEOI %>%
+SampleSurvey_pca <- HairSamplesNum %>%
   drop_na()
 
 # 3. Look at the distributions of the continuous variables to see if you should
@@ -251,11 +171,11 @@ fviz_pca_var(SampleSurvey_pca_est,
 # 8. You can plot PCA also grouped based on one of your categorical variables
 fviz_pca_biplot(SampleSurvey_pca_est,
                 geom.ind = "point", # show points only (but not "text")
-                col.ind = featuresOfProduct_vector, # color by categorical variable
+                col.ind = demographic_vector, # color by categorical variable
                 mean.point = FALSE, # Remove point that represents the mean of each group
                 addEllipses = TRUE, # add ellipses
                 col.var = "black", # make variables & arrows black (default is blue)
-                legend.title = "Features of Products Used")  +
+                legend.title = "Hair Texture")  +
   theme_bw()
 
 
