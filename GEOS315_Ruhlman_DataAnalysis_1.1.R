@@ -79,7 +79,7 @@ HairData_1.0_Percents_Labeled <- HairData_1.0_Percents_Labeled[-c(1,2,3),]
 HairData_1.0 <- HairData_1.0_Percents_Labeled
 
 
-##Seperate Out Standards & Samples
+##Separate Out Standards & Samples
 
 HairSamples_1.0 <- HairData_1.0[-c(1, 61, 62, 63, 64, 65, 66, 67, 68,
                                    69, 70, 71, 72, 73, 74, 75,
@@ -302,7 +302,8 @@ library(factoextra)
 HairSamplesCont <- HairSamples.ppm_1.0
 
 ##Step 2: Select out only EOIs
-HairSamplesContEOI <- select(HairSamplesCont, c(Zn,Fe, Cu, Ni, Mo, Pb, Sb,
+HairSamplesContEOI <- select(HairSamplesCont, c(Zn,Fe, Cu, Ni, #Mo,
+                                                Pb, Sb,
                                                 Ca, Ti, S, Si, P, Br))
 
 
@@ -342,7 +343,7 @@ library(readxl)
 HairSamplesContEOI #This is the object that's all of the EOI values in ppm
 
 ###Add the column of sample names back to that object
-HairSamplesEOINames <- select(HairSamplesContEOI, Zn, Fe, Cu, Ni, Mo, 
+HairSamplesEOINames <- select(HairSamplesContEOI, Zn, Fe, Cu, Ni, #Mo, 
                               Pb, Sb, Ca, Ti, S, Si, P, Br) %>%
   mutate(Sample.ID = c("H1-03.14.21-03",
                       "H1-03.14.21-02",
