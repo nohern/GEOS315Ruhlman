@@ -179,3 +179,23 @@ fviz_pca_biplot(SampleSurvey_pca_est,
   theme_bw()
 
 
+#Messing around with plots
+ggplot(HairData_2.0,) +
+  geom_boxplot(aes(x = Features.of.Product., y = Pb, 
+                   fill = Features.of.Product.)) +
+  xlab("Features of Product") +
+  ylab("Pb (ppm)")
+
+ggplot(HairData_2.0) +
+  geom_boxplot(aes(x = Diet, y = Fe, 
+                   fill = Diet,) ) +
+  xlab("Features of Product") +
+  ylab("Fe (ppm)")
+
+ggplot(HairData_2.0) +
+  geom_point(aes(x = Pb, y = Ca)) +
+  geom_smooth(aes(x = Pb, y = Ca), method = lm)
+
+ggplot(HairData_2.0) +
+  geom_point(aes(x = Pb, y = Cu)) +
+  geom_smooth(aes(x = Pb, y = Cu), method = lm)
