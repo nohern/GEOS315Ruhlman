@@ -181,10 +181,9 @@ fviz_pca_biplot(SampleSurvey_pca_est,
 
 #Messing around with plots
 ggplot(HairData_2.0,) +
-  geom_boxplot(aes(x = Features.of.Product., y = Pb, 
-                   fill = Features.of.Product.)) +
-  xlab("Features of Product") +
-  ylab("Pb (ppm)")
+  geom_boxplot(aes( x = Ti, 
+                   fill = Diet)) +
+   facet_grid(. ~Chemical.Treatment)
 
 ggplot(HairData_2.0) +
   geom_boxplot(aes(x = Diet, y = Fe, 
@@ -193,9 +192,20 @@ ggplot(HairData_2.0) +
   ylab("Fe (ppm)")
 
 ggplot(HairData_2.0) +
-  geom_point(aes(x = Pb, y = Ca)) +
+  geom_point(aes(x = Pb, y = Ca, color = Diet)) +
   geom_smooth(aes(x = Pb, y = Ca), method = lm)
 
 ggplot(HairData_2.0) +
-  geom_point(aes(x = Pb, y = Cu)) +
-  geom_smooth(aes(x = Pb, y = Cu), method = lm)
+  geom_point(aes(x = Ti, y = S, color = Hair.Texture)) +
+  geom_smooth(aes(x = Ti, y = S), method = lm) +
+  theme_bw() +
+  xlab("Ti (ppm)") +
+  ylab("S (ppm)")
+
+ggplot(HairData_2.0) +
+  geom_boxplot(aes(x = Pb), fill = "green3") +
+  xlab("Pb Content (ppm)") +
+  ylab("") +
+  theme_bw() +
+  ggtitle("Your Hair Pb Levels Compared to the Population") +
+  geom_vline(aes(xintercept = Pb[21]), linetype = "dashed", size = 2)
